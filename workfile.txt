@@ -1,1 +1,1 @@
-a*b+ {as@df(burro -3E-123)/pi} 3.1415E-23"abobrinha";c*disco-alpha45<-burro
+a*b+ {asdf(burro -3E-123)/pi} 3.1415E-23"abobrinha";c*disco-alpha45<-burro

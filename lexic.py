@@ -123,8 +123,6 @@ class LexicAnalyser:
         self.__cur_state = 0
         self.__char_index = 0
         self.__buffer = ''
-        self.__row = 1
-        self.__col = 0
 
 
     def getToken(self):
@@ -134,8 +132,6 @@ class LexicAnalyser:
         self.__font_file.seek(self.__char_index)
         char = self.__font_file.read(1)
         self.__char_index += 1
-        
-        
 
         #Chegou no fim do arquivo?
         if char == '': 
@@ -148,13 +144,8 @@ class LexicAnalyser:
 
             #se o caractere não pertence à linguagem
             if sym_row == -1:
-                
-                
                 self.__cur_state = 0
-
-                #atualiza as linhas e colunas
-                self.__rowcol(char)
-                print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence a linguagem!')
+                return Token('ERRO',  'Caractere <'+char+'> nao pertence a linguagem!','none')
 
             else:
                
@@ -194,13 +185,6 @@ class LexicAnalyser:
             return self.getToken()
              
 
-    # Faz update nas linhas/colunas
-    def __rowcol(self, char):
-        if char != '\n':
-            self.__col += 1
-        else:
-            self.__row += 1
-            self.__col = 0
 
     #   Retorna -1 se não pertencer ao alfabeto ou a posição, caso o contrário.
     def __in_alphabet(self, char):
