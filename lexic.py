@@ -10,7 +10,7 @@ class Token:
     def __init__(self, token, lexema, tipo):
         self.__token = token
         self.__lexema = lexema
-	self.__tipo = tipo
+        self.__tipo = tipo
 
     def getTk(self):
         return self.__token
@@ -136,7 +136,7 @@ class LexicAnalyser:
         #Chegou no fim do arquivo?
         if char == '': 
             self.__cur_state = 0
-            return Token('EOF', 'EOF')
+            return Token('EOF', 'EOF','none')
 
         else:
             
@@ -145,7 +145,7 @@ class LexicAnalyser:
             #se o caractere não pertence à linguagem
             if sym_row == -1:
                 self.__cur_state = 0
-                return Token('ERRO',  'Caractere <'+char+'> nao pertence a linguagem!')
+                return Token('ERRO',  'Caractere <'+char+'> nao pertence a linguagem!','none')
 
             else:
                
@@ -164,14 +164,14 @@ class LexicAnalyser:
 
 
                         #cria um token e depois de resetar o buffer e o estado, o envia
-                        tk = Token(self.__token[final], self.__buffer)
+                        tk = Token(self.__token[final], self.__buffer,'none')
                         self.__buffer = ''
                         self.__cur_state = 0
                         return tk
 
                     else:
                         self.__cur_state = 0
-                        return Token('ERRO', 'Caractere <'+char+'> nao esperado!')
+                        return Token('ERRO', 'Caractere <'+char+'> nao esperado!','none')
                 else:
 
                     #concatena o caractere (apenas  se não for TAB,SALTO ou ESPAÇO) e muda de estado
