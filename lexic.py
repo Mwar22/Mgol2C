@@ -7,13 +7,10 @@
 
 
 class Token:
-
-    __token_types = ['Num', 'Num', 'Num', 'Literal', 'id', 'Comentario', 'OPR', 'OPR', 'OPR', 'OPR', 'RCB', 'OPM', 'AB_P', 'FC_P', 'PTV']
-
     def __init__(self, token, lexema, tipo):
         self.__token = token
         self.__lexema = lexema
-	    self.__tipo = tipo
+	self.__tipo = tipo
 
     def getTk(self):
         return self.__token
@@ -30,7 +27,7 @@ class LexicAnalyser:
 
     __alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/(){}<>=.;_"\t\n '
     __final_state = [1, 3, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-    
+    __token = ['Num', 'Num', 'Num', 'Literal', 'id', 'Comentario', 'OPR', 'OPR', 'OPR', 'OPR', 'RCB', 'OPM', 'AB_P', 'FC_P', 'PTV']
 
 
     #   Formato: Cada linha representa um símbolo do alfabeto e as colunas os estados atuais.
@@ -167,7 +164,7 @@ class LexicAnalyser:
 
 
                         #cria um token e depois de resetar o buffer e o estado, o envia
-                        tk = Token(Token.__token_types[final], self.__buffer)
+                        tk = Token(self.__token[final], self.__buffer)
                         self.__buffer = ''
                         self.__cur_state = 0
                         return tk
