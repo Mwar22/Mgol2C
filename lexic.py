@@ -123,6 +123,8 @@ class LexicAnalyser:
         self.__cur_state = 0
         self.__char_index = 0
         self.__buffer = ''
+        self.__row = 1
+        self.__col = 0
 
 
     def getToken(self):
@@ -132,6 +134,7 @@ class LexicAnalyser:
         self.__font_file.seek(self.__char_index)
         char = self.__font_file.read(1)
         self.__char_index += 1
+        
 
         #Chegou no fim do arquivo?
         if char == '': 
@@ -139,52 +142,78 @@ class LexicAnalyser:
             return Token('EOF', 'EOF','none')
 
         else:
-            
-            sym_row = self.__in_alphabet(char)  #   Obtém a posição do símbolo no alfabeto
+             
 
-            #se o caractere não pertence à linguagem
-            if sym_row == -1:
-                self.__cur_state = 0
-                return Token('ERRO',  'Caractere <'+char+'> nao pertence a linguagem!','none')
 
-            else:
-               
+            #calcula sym_row, final e next
+            sym_row = self.__in_alphabet(char)
+            final = self.__is_final_state(self.__cur_state) 
 
-                #obtém a transição
-                next = self.__transition_tbl[sym_row][self.__cur_state]
+            #-1 caso não exista transições
+            next = -1   
+            if sym_row != -1:
+                next = self.__transition_tbl[sym_row][self.__cur_state]  
 
-                #se não existe transição partindo do estado atual
-                if next == -1:
-                    #O estado é final?
-                    final = self.__is_final_state(self.__cur_state)
-                    
-                    if final != -1:
+
+            #se for estado final...
+            if final != -1:
+
+                #se o caractere não pertença ao alfabeto ou não existe transição
+                if sym_row == -1 or next == -1:
+
+                    #cria um token e depois de resetar o buffer e o estado, o envia
+                    tk = Token(self.__token[final], self.__buffer,'none')
+                    self.__buffer = ''
+                    self.__cur_state = 0
+
+
+                    #caso esteja no alfabeto
+                    if sym_row != -1:
+
                         #volta o leitor
-                        self.__char_index -= 1 
-
-
-                        #cria um token e depois de resetar o buffer e o estado, o envia
-                        tk = Token(self.__token[final], self.__buffer,'none')
-                        self.__buffer = ''
-                        self.__cur_state = 0
-                        return tk
-
+                        self.__char_index -= 1
+                         
+             
                     else:
-                        self.__cur_state = 0
-                        return Token('ERRO', 'Caractere <'+char+'> nao esperado!','none')
-                else:
+                        #atualiza as linhas e coluna (pois o retorno do token impede o procedimento segundo o fluxo padrão)
+                        self.__rowcol(char) 
+                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence ao alfabeto!')
 
-                    #concatena o caractere (apenas  se não for TAB,SALTO ou ESPAÇO) e muda de estado
-                    if char != '\t' and char != '\n' and char != ' ':
-                        self.__buffer += char;
+                    return tk
 
+            #atualiza as linhas e colunas (estados não finais, fluxo padrão)
+            self.__rowcol(char) 
+           
+            if next != -1: #se existe transição... (sendo estado final ou não)
+                #concatena o caractere (apenas  se não for TAB,SALTO, ESPAÇO) e muda de estado
+                if char != '\t' and char != '\n' and char != ' ' and sym_row != -1:
+                    self.__buffer += char;
                     self.__cur_state = next
+
+            elif final == -1:#se não existe transição e não é estado final
+                print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> em '+self.__buffer + char +' nao esperado!')
+
+                #caso não esteja no alfabeto
+                if sym_row == -1:
+                    print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence ao alfabeto!')
+
+                self.__buffer = ''
+                self.__cur_state = 0
+
           
 
             #executa novamente
+            #print (char+'='+str(self.__row) + ':'+ str(self.__col));
             return self.getToken()
              
 
+    # Faz update nas linhas/colunas
+    def __rowcol(self, char):
+        if char != '\n':
+            self.__col += 1
+        else:
+            self.__row += 1
+            self.__col = 0
 
     #   Retorna -1 se não pertencer ao alfabeto ou a posição, caso o contrário.
     def __in_alphabet(self, char):
@@ -193,7 +222,7 @@ class LexicAnalyser:
                 return i
         return -1
 
-    #   Retorna True se for estado final, False caso o contrário. (busca linear simples, poucos valores)
+    #   Retorna o index se for estado final, -1 caso o contrário. (busca linear simples, poucos valores)
     def __is_final_state(self, state):
         for i in range (0,15):
             if self.__final_state[i] == state:
