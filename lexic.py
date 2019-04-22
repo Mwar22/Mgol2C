@@ -7,9 +7,10 @@
 
 
 class Token:
-    def __init__(self, token, lexema):
+    def __init__(self, token, lexema, tipo):
         self.__token = token
         self.__lexema = lexema
+	self.__tipo = tipo
 
     def getTk(self):
         return self.__token
@@ -29,7 +30,7 @@ class LexicAnalyser:
     __token = ['Num', 'Num', 'Num', 'Literal', 'id', 'Comentario', 'OPR', 'OPR', 'OPR', 'OPR', 'RCB', 'OPM', 'AB_P', 'FC_P', 'PTV']
 
 
-    #   Formato: cada linha representa uma transição, onde cada linha representa um símbolo do alfabeto e as colunas os estados atuais.
+    #   Formato: Cada linha representa um símbolo do alfabeto e as colunas os estados atuais.
     #   Os estados seguintes são representados pelos números em cada posição. -1 indica que não há transição em um dado estado e entrada.
     #   Nesta situação estados finais são reconhecidos, ou outros são tratados como erro.
 
