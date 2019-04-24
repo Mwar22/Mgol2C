@@ -54,6 +54,11 @@ class SymbolTable:
             self.__hash_tbl.pop(key)
         except:
             print('Chave'+ str(key)+' não encontrada!')
+
+    def print_table(self):
+        for i in self.__hash_tbl:
+            tk = self.__hash_tbl[i]
+            tk.prt()
         
 
 
@@ -165,6 +170,7 @@ class LexicAnalyser:
         self.__char_index = 0
         self.__buffer = ''
 
+        #contadores de linha e coluna
         self.__row = 1
         self.__col = 0
 
@@ -177,9 +183,10 @@ class LexicAnalyser:
         
 
     #método que retorna a tabela de símbolos
-    def getSymbolTable():
+    def getSymbolTable(self):
         return self.__st
 
+    #Método geral da classe, retorna um objeto Token
     def lexico(self):
         
 
@@ -312,8 +319,11 @@ f = open('workfile.txt', 'rb+')
 la = LexicAnalyser(f)
 tk = la.lexico()
 
-
+print ('Listando os tokens:')
 while tk.getTk() != 'EOF':
     tk.prt()
     tk = la.lexico()
 
+print('\nTabela de símbolos:')
+st = la.getSymbolTable()
+st.print_table()
