@@ -241,7 +241,7 @@ class LexicAnalyser:
                     else:
                         #atualiza as linhas e coluna (pois o retorno do token impede o procedimento segundo o fluxo padrão)
                         self.__rowcol(char) 
-                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> é permitido apenas entre "..." ou {...} !')
+                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere '+char+' é permitido apenas entre "..." ou {...} !')
 
 
 
@@ -279,9 +279,9 @@ class LexicAnalyser:
                     
                     #se no caractere for especial (não pertencer à gramatica)
                     if sym_row == -1:
-                        print('ERRO~ '+str(self.__row) + ':'+ str(self.__col) +' Caractere <'+char+'> é permitido apenas entre "..." ou {...} !')
+                        print('ERRO~ '+str(self.__row) + ':'+ str(self.__col) +' Caractere '+char+' é permitido apenas entre "..." ou {...} !')
                     else:
-                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> não esperado neste local!')
+                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere '+char+' não esperado em '+self.__buffer+char+' !')
                     
                     #reseta o buffer e começa novamente do estado inicial
                     self.__buffer = ''
