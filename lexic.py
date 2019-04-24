@@ -25,6 +25,8 @@ class SymbolTable:
     def __init__(self):
         self.__hash_tbl = {}
 
+
+    #inseri um elemento  na tabela hash, dada uma chave e um objeto Token
     def inserir(self, key, token):
         if self.consultar(key) == False:
             self.__hash_tbl[key] = token
@@ -32,6 +34,7 @@ class SymbolTable:
         return -1
         
 
+    #retorna um elemento (Token) dado uma chave key
     def ler(self, key):
         try:
             return self.__hash_tbl.get(key)
@@ -39,6 +42,7 @@ class SymbolTable:
             print('Chave'+ str(key)+' não encontrada!')
 
         
+    #Retorna True se existir elemento na tabela indexado pela chave key
     def consultar(self, key):
         if key in self.__hash_tbl:
             return True
@@ -172,10 +176,11 @@ class LexicAnalyser:
             self.__st.inserir(rw, Token(rw, rw, ''))
         
 
-    
+    #método que retorna a tabela de símbolos
+    def getSymbolTable():
+        return self.__st
 
-
-    def getToken(self):
+    def lexico(self):
         
 
         #Lê um caractere e avança o carro
@@ -211,10 +216,9 @@ class LexicAnalyser:
                 if sym_row == -1 or next == -1:
 
 
-
                     #cria um token e depois de resetar o buffer e o estado, o envia
                     tk = Token(self.__token[final], self.__buffer,'none')
-                    bf = self.__buffer  #backup do valor do buffer
+                    bf = self.__buffer  #backup do valor do buffer (pois o buffer real é resetado na sequência)
 
                     self.__buffer = ''
                     self.__cur_state = 0
@@ -233,18 +237,20 @@ class LexicAnalyser:
                         print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence ao alfabeto!')
 
 
-                    #verifica se o tipo do token é um id
+
+
+                    #Seção responsável pelo manuseamento da tabela de símbolos
+                    #Se o tipo do token for um id...
                     if self.__token[final] == 'id':
                         
-                        #se o token já estiver na tabela de simbolos, o retorna
+                        #Verifica se está na tabela. Retorna o que estiver, e adiciona se não estiver
                         if self.__st.consultar(bf):
                             return self.__st.ler(bf)
                         else:
                             #adiciona na tabela
                             self.__st.inserir(bf, tk)
                             return tk
-
-
+                    #retorna o token, se não for id
                     return tk
 
                     
@@ -252,7 +258,8 @@ class LexicAnalyser:
             #atualiza as linhas e colunas (estados não finais, fluxo padrão)
             self.__rowcol(char) 
            
-            if next != -1: #se existe transição... (sendo estado final ou não)
+            #se existe transição... (sendo estado final ou não)
+            if next != -1: 
                 #concatena o caractere (apenas  se não for TAB,SALTO, ESPAÇO) e muda de estado
                 if char != '\t' and char != '\n' and char != ' ' and sym_row != -1:
                     self.__buffer += char;
@@ -270,9 +277,8 @@ class LexicAnalyser:
 
           
 
-            #executa novamente
-            #print (char+'='+str(self.__row) + ':'+ str(self.__col));
-            return self.getToken()
+            #executa novamente (lê o próximo caractere, até reconhecer algum token)
+            return self.lexico()
              
 
     # Faz update nas linhas/colunas
@@ -304,10 +310,10 @@ class LexicAnalyser:
 
 f = open('workfile.txt', 'rb+')
 la = LexicAnalyser(f)
-tk = la.getToken()
+tk = la.lexico()
 
 
 while tk.getTk() != 'EOF':
     tk.prt()
-    tk = la.getToken()
+    tk = la.lexico()
 
