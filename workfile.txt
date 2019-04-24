@@ -1,2 +1,2 @@
-a*b+fim @#{as@df(burro -3E-123)/pi}se 3.1415E-23"abobrinha";c*disco-alpha45
+a*b+fim @#{as@df(burro }-3E-123)/pise 31415.e-23"abobrinha";c*disco-alpha45
 &<-$burro-a*c*disco

@@ -219,7 +219,7 @@ class LexicAnalyser:
             #se for estado final...
             if final != -1:
 
-                #se o caractere não pertença ao alfabeto ou não existe transição
+                #se o caractere não pertence ao alfabeto ou não existe transição
                 if sym_row == -1 or next == -1:
 
 
@@ -241,7 +241,7 @@ class LexicAnalyser:
                     else:
                         #atualiza as linhas e coluna (pois o retorno do token impede o procedimento segundo o fluxo padrão)
                         self.__rowcol(char) 
-                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence ao alfabeto!')
+                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> é permitido apenas entre "..." ou {...} !')
 
 
 
@@ -268,20 +268,33 @@ class LexicAnalyser:
             #se existe transição... (sendo estado final ou não)
             if next != -1: 
                 #concatena o caractere (apenas  se não for TAB,SALTO, ESPAÇO) e muda de estado
-                if char != '\t' and char != '\n' and char != ' ' and sym_row != -1:
+                if char != '\t' and char != '\n' and char != ' ':
                     self.__buffer += char;
                     self.__cur_state = next
 
             elif final == -1:#se não existe transição e não é estado final
-                print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> em '+self.__buffer + char +' nao esperado!')
 
-                #caso não esteja no alfabeto
-                if sym_row == -1:
-                    print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence ao alfabeto!')
+                #caso não esteja nos estados que aceitem qualquer coisa...
+                if self.__cur_state != 7 and self.__cur_state != 10:
+                    
+                    #se no caractere for especial (não pertencer à gramatica)
+                    if sym_row == -1:
+                        print('ERRO~ '+str(self.__row) + ':'+ str(self.__col) +' Caractere <'+char+'> é permitido apenas entre "..." ou {...} !')
+                    else:
+                        print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> não esperado neste local!')
+                    
+                    #reseta o buffer e começa novamente do estado inicial
+                    self.__buffer = ''
+                    self.__cur_state = 0
+                    
 
-                self.__buffer = ''
-                self.__cur_state = 0
+                else:
+                    #concatena o caractere 
+                    self.__buffer += char;
+                 
 
+            
+                    
           
 
             #executa novamente (lê o próximo caractere, até reconhecer algum token)
