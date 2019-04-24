@@ -20,6 +20,38 @@ class Token:
         print('Lexema: ' + self.__lexema + '  Token: '+self.__token)
         
 
+class SymbolTable:
+
+    def __init__(self):
+        self.__hash_tbl = {}
+
+    def inserir(self, key, token):
+        if self.consultar(key) == False:
+            self.__hash_tbl[key] = token
+            return 0
+        return -1
+        
+
+    def ler(self, key):
+        try:
+            return self.__hash_tbl.get(key)
+        except:
+            print('Chave'+ str(key)+' não encontrada!')
+
+        
+    def consultar(self, key):
+        if key in self.__hash_tbl:
+            return True
+        else:
+            return False
+    
+    def excluir(self, key):
+        try:
+            self.__hash_tbl.pop(key)
+        except:
+            print('Chave'+ str(key)+' não encontrada!')
+        
+
 
 class LexicAnalyser:
 
@@ -118,13 +150,29 @@ class LexicAnalyser:
 
 
 
+    # Método construtor da classe
     def __init__(self, font_file):
+        
+        #file handler para o fonte especificado
         self.__font_file = font_file
+        
+        #informações do autômato
         self.__cur_state = 0
         self.__char_index = 0
         self.__buffer = ''
+
         self.__row = 1
         self.__col = 0
+
+        #inicializa um objeto do tipo SymbolTable e inializa as palavras reservadas (e o token das mesmas):
+        self.__st = SymbolTable()
+
+        res_words = ['inicio', 'varinicio', 'varfim', 'escreva', 'leia', 'se', 'entao', 'fimse', 'fim', 'inteiro', 'lit', 'real']
+        for rw in res_words:
+            self.__st.inserir(rw, Token(rw, rw, ''))
+        
+
+    
 
 
     def getToken(self):
@@ -139,7 +187,8 @@ class LexicAnalyser:
         #Chegou no fim do arquivo?
         if char == '': 
             self.__cur_state = 0
-            return Token('EOF', 'EOF','none')
+            print ('Done! Fim do arquivo!')
+            return Token('EOF', 'EOF','')
 
         else:
              
@@ -161,8 +210,12 @@ class LexicAnalyser:
                 #se o caractere não pertença ao alfabeto ou não existe transição
                 if sym_row == -1 or next == -1:
 
+
+
                     #cria um token e depois de resetar o buffer e o estado, o envia
                     tk = Token(self.__token[final], self.__buffer,'none')
+                    bf = self.__buffer  #backup do valor do buffer
+
                     self.__buffer = ''
                     self.__cur_state = 0
 
@@ -179,7 +232,22 @@ class LexicAnalyser:
                         self.__rowcol(char) 
                         print('ERRO~ '+ str(self.__row) + ':'+ str(self.__col) + ' Caractere <'+char+'> nao pertence ao alfabeto!')
 
+
+                    #verifica se o tipo do token é um id
+                    if self.__token[final] == 'id':
+                        
+                        #se o token já estiver na tabela de simbolos, o retorna
+                        if self.__st.consultar(bf):
+                            return self.__st.ler(bf)
+                        else:
+                            #adiciona na tabela
+                            self.__st.inserir(bf, tk)
+                            return tk
+
+
                     return tk
+
+                    
 
             #atualiza as linhas e colunas (estados não finais, fluxo padrão)
             self.__rowcol(char) 
