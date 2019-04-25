@@ -5,6 +5,7 @@
 # Created by: Lucas de Jesus B.G
 # Creation date: 13/04/2019
 
+# Programmers: Lucas de Jesus & Welerson Assis
 
 class Token:
     def __init__(self, token, lexema, tipo):
@@ -277,7 +278,7 @@ class LexicAnalyser:
                 #caso não esteja nos estados que aceitem qualquer coisa...
                 if self.__cur_state != 7 and self.__cur_state != 10:
                     
-                    #se no caractere for especial (não pertencer à gramatica)
+                    #se o caractere for especial (não pertencer à gramatica)
                     if sym_row == -1:
                         print('ERRO~ '+str(self.__row) + ':'+ str(self.__col) +' Caractere '+char+' é permitido apenas entre "..." ou {...} !')
                     else:
