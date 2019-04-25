@@ -328,15 +328,24 @@ class LexicAnalyser:
 
 
 
-f = open('workfile.txt', 'rb+')
-la = LexicAnalyser(f)
-tk = la.lexico()
+#-------------------------------------------------TESTE-----------------------------------------------------
+#
 
+# Cria uma instância de analizador léxico, passando como parametro o arquivo 'fonte'
+f = open('texto.alg', 'rb+')
+la = LexicAnalyser(f)
+
+#pega um token
+tk = la.lexico() 
+
+#Apresenta na tela (apenas por verificação) cada token. Cada chamada de lexico() retorna um token.
 print ('Listando os tokens:')
 while tk.getTk() != 'EOF':
     tk.prt()
     tk = la.lexico()
 
+
+#teste auxiliar para exibir a tabela de símbolos (
 print('\nTabela de símbolos:')
 st = la.getSymbolTable()
 st.print_table()
