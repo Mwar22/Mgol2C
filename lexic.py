@@ -270,7 +270,7 @@ class LexicAnalyser:
             if next != -1: 
                 #concatena o caractere (apenas  se não for TAB,SALTO, ESPAÇO) e muda de estado
                 if char != '\t' and char != '\n' and char != ' ':
-                    self.__buffer += char;
+                    self.__buffer += char
                     self.__cur_state = next
 
             elif final == -1:#se não existe transição e não é estado final
@@ -291,7 +291,7 @@ class LexicAnalyser:
 
                 else:
                     #concatena o caractere 
-                    self.__buffer += char;
+                    self.__buffer += char
                  
 
             
