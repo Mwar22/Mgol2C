@@ -1,8 +1,8 @@
 inicio
    varinicio
-      A literal;
-      B inteiro;
-      c inteiro;
+      A lit;
+      B int;
+      c int;
    varfim;
 
    escreva "Digite um nome:";
@@ -20,10 +20,10 @@ inicio
    entao
      se (c <2)
      entao
-       escreva "texto”;
+       escreva "texto";
      fimse
    fimse
 
-   escreva "programa finalizado";   
+     
 
 fim

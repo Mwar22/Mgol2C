@@ -178,7 +178,7 @@ class LexicAnalyser:
         #inicializa um objeto do tipo SymbolTable e inializa as palavras reservadas (e o token das mesmas):
         self.__st = SymbolTable()
 
-        res_words = ['inicio', 'varinicio', 'varfim', 'escreva', 'leia', 'se', 'entao', 'fimse', 'fim', 'inteiro', 'lit', 'real']
+        res_words = ['inicio', 'varinicio', 'varfim', 'escreva', 'leia', 'se', 'entao', 'fimse', 'fim', 'int', 'lit', 'real']
         for rw in res_words:
             self.__st.inserir(rw, Token(rw, rw, ''))
         
@@ -200,8 +200,7 @@ class LexicAnalyser:
         #Chegou no fim do arquivo?
         if char == '': 
             self.__cur_state = 0
-            print ('Done! Fim do arquivo!')
-            return Token('EOF', 'EOF','')
+            return Token('$', 'EOF','')
 
         else:
              
@@ -325,28 +324,3 @@ class LexicAnalyser:
 
         return -1
 
-
-
-
-
-#-------------------------------------------------TESTE-----------------------------------------------------
-#
-
-# Cria uma instância de analizador léxico, passando como parametro o arquivo 'fonte'
-f = open('texto.alg', 'rb+')
-la = LexicAnalyser(f)
-
-#pega um token
-tk = la.lexico() 
-
-#Apresenta na tela (apenas por verificação) cada token. Cada chamada de lexico() retorna um token.
-print ('Listando os tokens:')
-while tk.getTk() != 'EOF':
-    tk.prt()
-    tk = la.lexico()
-
-
-#teste auxiliar para exibir a tabela de símbolos (
-print('\nTabela de símbolos:')
-st = la.getSymbolTable()
-st.print_table()
