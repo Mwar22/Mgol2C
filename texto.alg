@@ -5,7 +5,7 @@ inicio
       c int;
    varfim;
 
-   escreva lit "Digite um nome:";
+   escreva Digite um nome:";
    leia A;
 
    escreva "Digite um numero:";
@@ -15,13 +15,14 @@ inicio
    B <- 3;
    c <- B+1;
    c <- c+1;
+   
     
    se (B<1)
    entao
      se (c <2)
      entao 
        escreva "texto";
-     fimse
+     fimsdf
    fimse
 
      

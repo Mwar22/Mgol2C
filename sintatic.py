@@ -176,6 +176,8 @@ class Sintatico:
         #salva o objeto controlador do analizador lexico
         self.__lexical_obj = lexical_obj
 
+        self.__old_token = None
+
         #Lê o token 
         self.__token = lexical_obj.lexico()
 
@@ -236,7 +238,8 @@ class Sintatico:
                 
 
                 
-                #lê o proximo token
+                #lê o proximo token (e faz um backup do token anterior)
+                self.__old_token = self.__token
                 self.__token = self.__lexical_obj.lexico()
 
                 #obtem um índice(colunas) na tabela de ações
@@ -278,9 +281,10 @@ class Sintatico:
             else:
                 #Obtem o estado  em que ocorreu o erro (token não esperado)
                 est = -1*(tmp + 1)  
-  
-                print(" Erro :(" + str(self.__token.getRow()) + "," + str(self.__token.getCol())+") Esperado < " + t_esp[est]+ " >" +
-                      " porem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 
+                
+                print("Erro :(" + str(self.__token.getRow()) + "," + str(self.__token.getCol())+") Esperado < " + t_esp[est]+ " >" +
+                      " depois de '"+self.__old_token.getLexem() + "' do tipo '" + self.__old_token.getTk()+"'")
+                print("\tPorem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 
             
                 break;
         
