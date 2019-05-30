@@ -19,7 +19,7 @@ inicio
    se (B<1)
    entao
      se (c <2)
-     entao
+     entao -
        escreva "texto";
      fimse
    fimse
