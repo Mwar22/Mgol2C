@@ -8,14 +8,24 @@
 # Programmers: Lucas de Jesus & Welerson Assis
 
 class Token:
-    def __init__(self, token, lexema, tipo):
+    def __init__(self, token, lexema, tipo, row, col):
         self.__token = token
         self.__lexema = lexema
         self.__tipo = tipo
+        self.__row = row
+        self.__col = col
+
+    def getLexem(self):
+        return self.__lexema
 
     def getTk(self):
         return self.__token
 
+    def getRow(self):
+        return self.__row
+
+    def getCol(self):
+        return self.__col
 
     def prt(self):
         print('Lexema: ' + self.__lexema + '  Token: '+self.__token)
@@ -180,7 +190,7 @@ class LexicAnalyser:
 
         res_words = ['inicio', 'varinicio', 'varfim', 'escreva', 'leia', 'se', 'entao', 'fimse', 'fim', 'int', 'lit', 'real']
         for rw in res_words:
-            self.__st.inserir(rw, Token(rw, rw, ''))
+            self.__st.inserir(rw, Token(rw, rw, '', self.__row, (self.__col - len(rw) +1)))
         
 
     #método que retorna a tabela de símbolos
@@ -200,7 +210,7 @@ class LexicAnalyser:
         #Chegou no fim do arquivo?
         if char == '': 
             self.__cur_state = 0
-            return Token('$', 'EOF','')
+            return Token('$', 'EOF','', self.__row, self.__col +1)
 
         else:
              
@@ -224,7 +234,7 @@ class LexicAnalyser:
 
 
                     #cria um token e depois de resetar o buffer e o estado, o envia
-                    tk = Token(self.__token[final], self.__buffer,'none')
+                    tk = Token(self.__token[final], self.__buffer,'none', self.__row, (self.__col - len(self.__buffer) + 1))
                     bf = self.__buffer  #backup do valor do buffer (pois o buffer real é resetado na sequência)
 
                     self.__buffer = ''
