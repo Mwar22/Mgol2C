@@ -278,6 +278,7 @@ class Sintatico:
             else:
                 #Obtem o estado  em que ocorreu o erro (token não esperado)
                 est = -1*(tmp + 1)  
+                print("est = "+str(est))
 
                 print(" Erro :(" + str(self.__token.getRow()) + "," + str(self.__token.getCol())+") Esperado < " + t_esp[est]+ " >" +
                       " porem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 

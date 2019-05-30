@@ -15,6 +15,8 @@ class Token:
         self.__row = row
         self.__col = col
 
+
+    #metodos getter e setter
     def getLexem(self):
         return self.__lexema
 
@@ -24,8 +26,14 @@ class Token:
     def getRow(self):
         return self.__row
 
+    def setRow(self, row):
+        self.__row = row
+
     def getCol(self):
         return self.__col
+
+    def setCol(self, col):
+        self.__col = col
 
     def prt(self):
         print('Lexema: ' + self.__lexema + '  Token: '+self.__token)
@@ -190,7 +198,7 @@ class LexicAnalyser:
 
         res_words = ['inicio', 'varinicio', 'varfim', 'escreva', 'leia', 'se', 'entao', 'fimse', 'fim', 'int', 'lit', 'real']
         for rw in res_words:
-            self.__st.inserir(rw, Token(rw, rw, '', self.__row, (self.__col - len(rw) +1)))
+            self.__st.inserir(rw, Token(rw, rw, '', 0, 0))
         
 
     #método que retorna a tabela de símbolos
@@ -262,7 +270,10 @@ class LexicAnalyser:
                         
                         #Verifica se está na tabela. Retorna o que estiver, e adiciona se não estiver
                         if self.__st.consultar(bf):
-                            return self.__st.ler(bf)
+                            tk = self.__st.ler(bf)
+                            tk.setRow(self.__row)
+                            tk.setCol(self.__col -len(tk.getLexem()) + 1)
+                            return tk
                         else:
                             #adiciona na tabela
                             self.__st.inserir(bf, tk)
