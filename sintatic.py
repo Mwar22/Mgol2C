@@ -282,8 +282,12 @@ class Sintatico:
                 #Obtem o estado  em que ocorreu o erro (token não esperado)
                 est = -1*(tmp + 1)  
                 
-                print("Erro :(" + str(self.__token.getRow()) + "," + str(self.__token.getCol())+") Esperado < " + t_esp[est]+ " >" +
-                      " depois de '"+self.__old_token.getLexem() + "' do tipo '" + self.__old_token.getTk()+"'")
+                if (self.__old_token != None):
+                    print("Erro :(" + str(self.__token.getRow()) + "," + str(self.__token.getCol())+") Esperado < " + t_esp[est]+ " >" +
+                          " depois de '"+self.__old_token.getLexem() + "' do tipo '" + self.__old_token.getTk()+"'")
+                else:
+                    print("Erro :(" + str(self.__token.getRow()) + "," + str(self.__token.getCol())+") Esperado < " + t_esp[est]+ " >")
+
                 print("\tPorem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 
             
                 break;
