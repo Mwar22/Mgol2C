@@ -281,6 +281,7 @@ class LexicAnalyser:
                     #retorna o token, se não for id
                     return tk
 
+      
                     
 
             #atualiza as linhas e colunas (estados não finais, fluxo padrão)

@@ -3,13 +3,13 @@ inicio
       A lit;
       B int;
       c int;
-   varfim
+   varfim;
 
    escreva "Digite um nome:";
    leia A;
 
    escreva "Digite um numero:";
-   leia B
+   leia B;
 
    B <- 2;
    B <- 3;
@@ -21,7 +21,7 @@ inicio
    entao
      se (c <2)
      entao 
-       escreva "texto";
+       escreva "texto;
      fimse
    fimse
 

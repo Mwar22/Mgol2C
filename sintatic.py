@@ -309,6 +309,7 @@ class Sintatico:
                 print("\tPorem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 
             
                 self.erro()
+                break
 
             
                 
@@ -374,6 +375,7 @@ class Sintatico:
             self.__token = self.__lexical_obj.lexico()
             lexema = self.__token.getLexem()
 
+            #procura no conjunto dos seguintes para o dado não terminal
             for i in FOLLOWS_LEXEM[nt]:
                 if lexema == i:
                     sinchronized = True
