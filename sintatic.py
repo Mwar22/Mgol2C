@@ -166,6 +166,24 @@ t_esp = ["inicio", "EOF", "varinicio", "id, leia, escreva, se, fim", "varfim, id
         "id, leia, escreva, se, fimse, fim", "id, leia, escreva, se, fimse, fim", ")", "opr", "varfim, id", 
         "id, leia, escreva, se, fimse, fim", "id, num", "entao", "id, num", ";", "id, leia, escreva, se, fimse", ")"]
 
+FOLLOWS_LEXEM = [
+            ["$"],
+            ["leia", "escreva", "id", "se", "fim"],
+            ["$"],
+            ["leia", "escreva", "id", "se", "fim"],
+            ["id", "varfim"],
+            [";"],
+            ["leia", "escreva", "id", "se", "fimse", "fim"],
+            [";"],
+            ["leia", "escreva", "id", "se", "fimse", "fim"],
+            [";"],
+            [";", ")", "opr", "opm"],
+            ["leia", "escreva", "id", "se", "fimse", "fim"],
+            ["leia", "escreva", "se", "id", "fimse"],
+            ["leia", "escreva", "id", "se", "fimse", "fim"],
+            [")"]]
+
+
 class Sintatico:
 
     def __init__(self, lexical_obj):
@@ -206,18 +224,18 @@ class Sintatico:
     #recebe como argumento um objeto do tipo analizador lexico.
     def sintatico(self):
         
-        
-        #obtem um índice(colunas) na tabela de ações
-        a = self.getActionIndex(self.__token)
-
-        #caso não encontre...
-        if a == -1:
-            print ("Erro, token desconhecido\n")
-            return
 
         t = None;
 
         while (True):
+
+            #obtem um índice(colunas) na tabela de ações
+            a = self.getActionIndex(self.__token)
+
+            #caso não encontre...
+            if a == -1:
+                print ("Erro, token desconhecido\n")
+                return
 
             # s assume o valor que ocupa o topo da pilha.
             s = self.__stack[self.__sp]
@@ -291,12 +309,13 @@ class Sintatico:
                 print("\tPorem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 
             
                 self.erro()
-                break;
 
+            
+                
 
     def erro(self):
-        #copia a pilha atual
-        local_stk = list(self.__stack)
+        #Pega o tamanho da pilha
+        stk_len = len(self.__stack)
 
         #maior
         index_pilha = 0
@@ -304,33 +323,74 @@ class Sintatico:
         #não terminal
         nt = 0
 
-        print('Topo da pilha: '+str(len(local_stk)))
-        print('------------------------------------')
+        #print('Topo da pilha: '+str(len(self.__stack)))
+        #print('------------------------------------')
 
         #varre, para cada não terminal...
         for n  in range (0, 15):
             
-            print('\nMaior: '+str(index_pilha))
-            print('N-Terminal: '+str(n));
+            #print('\nMaior: '+str(index_pilha))
+            #print('N-Terminal: '+str(n));
 
             #Para cada estado da pilha, do topo ao inicio...{ s em  (size, 0]}
-            for i in range(len(local_stk) -1, -1, -1):
+            for i in range(stk_len -1, -1, -1):
                 
                 #se a transição para o estado que está no index 's' da pilha existe para
                 #o dado não terminal indexado por 'n', e se o index for maior que o 'maior'
                 #(ou seja, está mais proximo ao topo da pilha, precisando desempilhar menos no futuro):
 
-                estado = local_stk[i]
-                print('Indice: '+str(i)+', estado: '+str(estado)+', GOTO:'+ str(GOTO[estado][n] ))
+                estado = self.__stack[i]
+                #print('Indice: '+str(i)+', estado: '+str(estado)+', GOTO:'+ str(GOTO[estado][n] ))
 
                 if ((GOTO[estado][n] != -1) and (i > index_pilha)):
                     index_pilha = i
                     nt = n
                     
-                    print('->Indice: '+str(i)+', N-Terminal:'+str(n)+'')
-                    print('->Maior: '+str(index_pilha)+', N-Term: '+str(nt))
-                    
+                    #print('->Indice: '+str(i)+', N-Terminal:'+str(n)+'')
+                    #print('->Maior: '+str(index_pilha)+', N-Term: '+str(nt))
+             
                     break
+
+        #----------------------------------------------------------------------------------------
+        #desempilha a pilha até que seu topo tenha o valor de index_pilha (menor numero de desempilhamentos)
+        for i in range (stk_len -1, index_pilha, -1):
+            self.__stack.pop()
+        self.__sp = index_pilha
+
+
+        #joga o valor da transição na pilha
+        self.__stack.append(GOTO[self.__stack[self.__sp]][nt])
+        self.__sp += 1
+
+        #Faz um um backup do token 
+        self.__old_token = self.__token
+
+        #indica se encontrou um token de sincronização
+        sinchronized = False
+
+        #enquanto não tiver...descarta tokens até encontrar um que tenha
+        while(sinchronized == False):
+            #Lê um novo token
+            self.__token = self.__lexical_obj.lexico()
+            lexema = self.__token.getLexem()
+
+            for i in FOLLOWS_LEXEM[nt]:
+                if lexema == i:
+                    sinchronized = True
+                    break
+
+            #caso especial... lexema de $ é 'EOF'
+            if lexema == 'EOF':
+                break
+
+
+         
+
+                
+            
+
+        
+        
 
 
         
