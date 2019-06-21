@@ -313,6 +313,7 @@ class LexicAnalyser:
                 else:
                     #concatena o caractere 
                     self.__buffer += char
+
                  
 
             

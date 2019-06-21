@@ -309,8 +309,10 @@ class Sintatico:
                 print("\tPorem '" + self.__token.getLexem() + "' do tipo '" + self.__token.getTk() + "' foi lido.") 
             
                 self.erro()
-                break
 
+                #condição de parada, para quando não há mais o que ler
+                if self.__token.getTk() == '$':
+                    break
             
                 
 
