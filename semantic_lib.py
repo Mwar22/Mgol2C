@@ -1,8 +1,12 @@
 #cria uma instância de TempHandler (manipulador de temporarios)
 th = TempHandler()
 
+
 #Retorna o tipo do elemento que ocupará o topo da pilha de tipos.
-def sem (self, index):
+def sem (analyser, index):
+    #indice do topo da pilha
+    sp = analyser.getSp()
+
     if index == 4:
         imprimir("\n\n\n")
 
@@ -11,11 +15,11 @@ def sem (self, index):
 
         #id e TIPO são referências à objetos. id (objeto) fica armazenado 
         #(estático) na tabela de símbolos
+        
+        idi  = analyser.getSemStck(sp - 2)
+        TIPO =  analyser.getSemStck(sp - 1)
 
-        idi  = self.__semantic_stck[self.__sp - 2]
-        TIPO =  self.__semantic_stck[self.__sp - 1]
-
-        id.setTipo(TIPO.getTipo())    
+        idi.setTipo(TIPO.getTipo())    
 
         #não empilha nada ao fim do reduce
         return None    
@@ -23,20 +27,20 @@ def sem (self, index):
     elif index == 6:
         #TIPO->inteiro
         #TIPO.tipo = inteiro.tipo
-        return Token("","", self.__semantic_stck[self.__sp],0,0)
+        return Token("","", analyser.getSemStck(sp),0,0)
 
     elif index == 7:
         #TIPO->real
-        return Token("","", self.__semantic_stck[self.__sp],0,0)
+        return Token("","", analyser.getSemStck(sp),0,0)
 
     elif index == 8:
         #TIPO->literal
-        return Token("","", self.__semantic_stck[self.__sp],0,0)
+        return Token("","", analyser.getSemStck(sp),0,0)
 
 
     elif index == 10:
         #ES->leia id;
-        idi  = self.__semantic_stck[self.__sp]
+        idi  = analyser.getSemStck(sp -1)
 
         #obtem o tipo
         id_tipo = idi.getTipo()
@@ -58,14 +62,14 @@ def sem (self, index):
 
     elif index == 11:
         #ES->escreva ARG;
-        ARG = self.__semantic_stck[self.__sp]
+        ARG = analyser.getSemStck(sp -1)
 
         imprimir("printf(“" + ARG.getLexem() +"”);" )
         return None
 
     elif index == 12:
         #ARG->literal
-        literal = self.__semantic_stck[self.__sp]
+        literal = analyser.getSemStck(sp)
 
         #Copia o objeto literal (efetivamente, todos os seus atributos)
         return  literal.copy()
@@ -73,7 +77,7 @@ def sem (self, index):
 
     elif index == 13:
         #ARG->num
-        num = self.__semantic_stck[self.__sp]
+        num = analyser.getSemStck(sp)
         
         return num.copy()
 
@@ -81,16 +85,16 @@ def sem (self, index):
         
     elif index == 14:
         #ARG->id
-        idi = self.__semantic_stck[self.__sp]
+        idi = analyser.getSemStck(sp)
         
         return idi.copy()
 
         
     elif index == 16:
         #CMD ->id rcb LD;
-        idi = self.__semantic_stck[self.__sp -3]
-        rcb = self.__semantic_stck[self.__sp -2]
-        LD = self.__semantic_stck[self.__sp -1]
+        idi = analyser.getSemStck(sp - 3)
+        rcb = analyser.getSemStck(sp - 2)
+        LD = analyser.getSemStck(sp - 1)
 
         if idi.getTipo() != "":
             
@@ -114,16 +118,16 @@ def sem (self, index):
     elif index == 17:
         #LD->OPRD(2)  opm OPRD(1)
 
-        OPRD1 = self.__semantic_stck[self.__sp]
-        opm = self.__semantic_stck[self.__sp - 1]
-        OPRD2 =  self.__semantic_stck[self.__sp - 2]
+        OPRD1 = analyser.getSemStck(sp)
+        opm = analyser.getSemStck(sp - 1)
+        OPRD2 =  analyser.getSemStck(sp - 2)
         
         #token de retorno
         LD = None
 
-        if (OPRD1.getTipo() == OPRD2.getTipo) and (OPRD1.getTipo() != ‘literal’):
+        if (OPRD1.getTipo() == OPRD2.getTipo) and (OPRD1.getTipo() != "literal"):
             x = th.newT()
-            LD = Token(‘’, th.getText(x), 0, 0)
+            LD = Token("", th.getText(x), 0, 0)
 
             imprimir(th.getText(x) + " = "+ OPRD2.getLexem() + " "+ opm.getTipo() +" "+ OPRD2.getLexem())
             
@@ -142,7 +146,7 @@ def sem (self, index):
 
     elif index == 18:
         #LD->OPRD
-        OPRD = self.__semantic_stck[self.__sp]
+        OPRD = analyser.getSemStck(sp)
 
         LD = OPRD.copy()
         return LD
@@ -151,7 +155,7 @@ def sem (self, index):
 
     elif index == 19:
         #OPRD->id
-        idi = self.__semantic_stck[self.__sp]
+        idi = analyser.getSemStck(sp)
         OPRD = None
 
         if idi.getTipo() != "":
@@ -164,7 +168,7 @@ def sem (self, index):
         
     elif index == 20:
         #OPRD->num
-        num = self.__semantic_stck[self.__sp]
+        num = analyser.getSemStck(sp)
 
         OPRD = num.copy()
         return OPRD
@@ -177,7 +181,7 @@ def sem (self, index):
 
     elif index == 23:
         #CABEÇALHO->se (EXP_R) então
-        EXP_R = self.__semantic_stck[self.__sp -2]
+        EXP_R = analyser.getSemStck(sp - 2)
 
         imprimir("if(" + EXP_R.getLexem() + "){")
 
@@ -192,9 +196,9 @@ def sem (self, index):
         #EXP_R->OPRD opr OPRD
     
         
-        OPRD1 = self.__semantic_stck[self.__sp]
-        opr = self.__semantic_stck[self.__sp - 1]
-        OPRD2 =  self.__semantic_stck[self.__sp - 2]
+        OPRD1 = analyser.getSemStck(sp)
+        opr = analyser.getSemStck(sp - 1)
+        OPRD2 =  analyser.getSemStck(sp - 2)
         
         #token de retorno
         EXP_R = None
@@ -215,7 +219,8 @@ def sem (self, index):
 
 
 
-
+def imprimir(text):
+    print(x)
 
 
 
