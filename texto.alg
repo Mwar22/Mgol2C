@@ -18,11 +18,11 @@ inicio
    c <- c+1;
    
     
-   se (B<1)
+   se (B 1)
    entao
      se (c <2)
      entao 
-       escreva "texto;
+       escreva "texto";
      fimse
    fimse
 

@@ -35,6 +35,16 @@ class Token:
     def setCol(self, col):
         self.__col = col
 
+    def setTipo(self, tipo):
+        self.__tipo = tipo
+
+    def getTipo(self):
+        return self.__tipo
+
+    #funções extras
+
+    def copy(self):
+        return Token(self.__token, self.__lexema, self.__tipo, self.__row, self.__col)
     def prt(self):
         print('Lexema: ' + self.__lexema + '  Token: '+self.__token)
         

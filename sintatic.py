@@ -191,6 +191,10 @@ class Sintatico:
         self.__sp = 0        #index para o topo da pilha
         self.__stack = [0]    #pilha
 
+
+        #pilha auxiliar do analisador semantico.
+        self.__semantic_stack = []
+
         #salva o objeto controlador do analizador lexico
         self.__lexical_obj = lexical_obj
 
@@ -253,6 +257,10 @@ class Sintatico:
                 #empilha o estado especificado na ação (apenas a unidade e a dezena fazem parte deste numero)
                 self.__stack.append(t)
                 self.__sp += 1
+
+
+                #clona o comportamento da pilha do sintatico (anal. semantico)
+                self.__semantic_stack.append(self.__token)
                 
 
                 
@@ -273,6 +281,10 @@ class Sintatico:
                 for i in range(0, betha_sz[prod -1]):
                     self.__stack.pop()
                     self.__sp -= 1
+
+                    #clona o comportamento...
+                    self.__semantic_stack.pop()
+                
 
 
                 # faz ‘t’ ter o valor do topo da pilha
@@ -326,15 +338,9 @@ class Sintatico:
         #não terminal
         nt = 0
 
-        #print('Topo da pilha: '+str(len(self.__stack)))
-        #print('------------------------------------')
-
         #varre, para cada não terminal...
         for n  in range (0, 15):
             
-            #print('\nMaior: '+str(index_pilha))
-            #print('N-Terminal: '+str(n));
-
             #Para cada estado da pilha, do topo ao inicio...{ s em  (size, 0]}
             for i in range(stk_len -1, -1, -1):
                 
@@ -354,12 +360,13 @@ class Sintatico:
              
                     break
 
+        
+
         #----------------------------------------------------------------------------------------
         #desempilha a pilha até que seu topo tenha o valor de index_pilha (menor numero de desempilhamentos)
         for i in range (stk_len -1, index_pilha, -1):
             self.__stack.pop()
         self.__sp = index_pilha
-
 
         #joga o valor da transição na pilha
         self.__stack.append(GOTO[self.__stack[self.__sp]][nt])
@@ -373,26 +380,33 @@ class Sintatico:
 
         #enquanto não tiver...descarta tokens até encontrar um que tenha
         while(sinchronized == False):
+
             #Lê um novo token
             self.__token = self.__lexical_obj.lexico()
+
+            
+            #obtem o lexema
             lexema = self.__token.getLexem()
 
+            print('r: '+lexema)
             #procura no conjunto dos seguintes para o dado não terminal
             for i in FOLLOWS_LEXEM[nt]:
                 if lexema == i:
+                    print("ok")
                     sinchronized = True
                     break
-
             #caso especial... lexema de $ é 'EOF'
             if lexema == 'EOF':
                 break
 
-
          
+
 
                 
             
-
+    def sem(self, index):
+        
+        
         
         
 
