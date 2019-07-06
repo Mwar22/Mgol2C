@@ -1,3 +1,31 @@
+# -*- coding: utf-8 -*-
+
+
+
+class TempHandler:
+
+    def __init__(self):
+
+        #contador
+        self.__x = 0
+
+    def newT(self):
+        self.__x += 1
+        return self.__x
+
+    #Retorna uma representação em texto de um temporário i
+    def getTxt(self, i):
+        return ("T"+str(i))
+
+
+
+
+def imprimir(text):
+    print(text)
+
+
+
+
 #cria uma instância de TempHandler (manipulador de temporarios)
 th = TempHandler()
 
@@ -205,7 +233,7 @@ def sem (analyser, index):
 
         if (OPRD1.getTipo() == OPRD2.getTipo) :
             x = th.newT()
-            EXP_R = Token("", setLexem(th.getText(x),0,0)
+            EXP_R = Token("", setLexem(th.getText(x), "",0,0)
 
             imprimir(th.getText(x) + " = " + OPRD2.getLexem() +" "+opr.getTipo() +" "+ OPRD1.getLexem() )
         else:
@@ -213,33 +241,5 @@ def sem (analyser, index):
             print("Linha: "+str(OPRD2.getRow()) + ", Coluna: " + str(OPRD2.getCol()))    
 
         return EXP_R
-
-
-
-
-
-
-def imprimir(text):
-    print(x)
-
-
-
-class TempHandler:
-
-    def __init__(self):
-
-        #contador
-        self.__x = 0
-
-    def newT(self):
-        self.__x += 1
-        return self.__x
-
-    #Retorna uma representação em texto de um temporário i
-    def getTxt(self, i):
-        return ("T"+str(i))
-
-
-
     
 

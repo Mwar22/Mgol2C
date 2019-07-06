@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import semantic_lib
 
 #Gramática
 G = ["P' -> P", "P -> inicio V A", "V -> varinicio LV","LV -> D LV", "LV -> varfim;",
@@ -205,7 +206,7 @@ class Sintatico:
 
 
     #retorna o elemento de intex i da pilha do semantico
-    def getSemStck(self, index);
+    def getSemStck(self, index):
         return self.__semantic_stack[i]
 
     #retorna o indice atual da pilha    
@@ -285,24 +286,28 @@ class Sintatico:
 
                 
                 #aplica as regras semânticas
-                topo = sem(prod);
-                
-                
+                topo = sem(self, prod);
+
+                #token burro, apenas para ocupar um espaço na pilha e permitir seu correto funcionamento
+                if topo == None:
+                    topo = Token('','','',0,0)
+                    
+          
+              
+                    
                 
                 #Desempilha |betha| (subtrai 1 de prod pois o vetor betha_sz  começa a indexar à partir da produção 1
                 for i in range(0, betha_sz[prod -1]):
                     self.__stack.pop()
                     self.__sp -= 1
 
+                    #clona o comportamento na pilha do semantico
+                    self.__semantic_stack.pop()
 
-                #clona o comportamento na pilha do semantico
-                self.__semantic_stack.pop()
-
-                if topo != None:
-                    self.__semantic_stack.append(topo)
-                else:
-                    self.__semantic__stac
                 
+                #empilha o não terminal da redução
+                self.__semantic_stack.append(topo)
+             
 
 
                 # faz ‘t’ ter o valor do topo da pilha
@@ -420,9 +425,7 @@ class Sintatico:
          
 
 
-                
-            
-    def sem(self, index):
+               
         
         
         

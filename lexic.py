@@ -283,12 +283,17 @@ class LexicAnalyser:
                             tk = self.__st.ler(bf)
                             tk.setRow(self.__row)
                             tk.setCol(self.__col -len(tk.getLexem()) + 1)
+
+                            tk.typefix()
                             return tk
                         else:
                             #adiciona na tabela
                             self.__st.inserir(bf, tk)
+
+                            tk.typefix()
                             return tk
                     #retorna o token, se não for id
+                    tk.typefix()
                     return tk
 
       
@@ -349,6 +354,7 @@ class LexicAnalyser:
                 return i
         return -1
 
+
     #   Retorna o index se for estado final, -1 caso o contrário. (busca linear simples, poucos valores)
     def __is_final_state(self, state):
         for i in range (0,15):
@@ -356,4 +362,21 @@ class LexicAnalyser:
                 return i
 
         return -1
+
+    #efetua as correções de tipos
+    def typefix(self):
+        token = self.getTk()
+        lexema = self.getLexem()
+
+        if token == "opm":
+            token.setTipo(lexema)
+
+        elif token == "int":
+            token.setTipo("int")
+
+        elif token == "opm":
+            token.setTipo(lexema)
+
+        elif token == "rcb":
+            token.setTipo("=")
 
