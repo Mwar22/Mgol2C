@@ -93,7 +93,7 @@ def sem (analyser, index):
         #ES->escreva ARG;
         ARG = analyser.getSemStck(sp -1)
 
-        imprimir("printf(“" + ARG.getLexem() +"”);" )
+        imprimir('printf(' + ARG.getLexem() +');' )
         return None
 
     elif index == 12:
