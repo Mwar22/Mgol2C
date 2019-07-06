@@ -45,8 +45,26 @@ class Token:
 
     def copy(self):
         return Token(self.__token, self.__lexema, self.__tipo, self.__row, self.__col)
+
     def prt(self):
         print('Lexema: ' + self.__lexema + '  Token: '+self.__token)
+
+     #efetua as correções de tipos
+    def typefix(self):
+        token = self.getTk()
+        lexema = self.getLexem()
+
+        if token == "opm":
+            self.setTipo(lexema)
+
+        elif token == "int":
+            self.setTipo("int")
+
+        elif token == "opm":
+            self.setTipo(lexema)
+
+        elif token == "rcb":
+            self.setTipo("=")
         
 
 class SymbolTable:
@@ -363,20 +381,4 @@ class LexicAnalyser:
 
         return -1
 
-    #efetua as correções de tipos
-    def typefix(self):
-        token = self.getTk()
-        lexema = self.getLexem()
-
-        if token == "opm":
-            token.setTipo(lexema)
-
-        elif token == "int":
-            token.setTipo("int")
-
-        elif token == "opm":
-            token.setTipo(lexema)
-
-        elif token == "rcb":
-            token.setTipo("=")
 

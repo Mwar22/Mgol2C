@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+from lexic import Token
 
 class TempHandler:
 
@@ -187,7 +188,7 @@ def sem (analyser, index):
         OPRD = None
 
         if idi.getTipo() != "":
-            OPRD = id.copy()
+            OPRD = idi.copy()
         else:
             print("Erro : Variável não declarada")
             print("Linha: " + str(idi.getRow()) + ", Coluna: " + str(idi.getCol()))
@@ -233,7 +234,7 @@ def sem (analyser, index):
 
         if (OPRD1.getTipo() == OPRD2.getTipo) :
             x = th.newT()
-            EXP_R = Token("", setLexem(th.getText(x), "",0,0)
+            EXP_R = Token("", th.getText(x), "",0,0)
 
             imprimir(th.getText(x) + " = " + OPRD2.getLexem() +" "+opr.getTipo() +" "+ OPRD1.getLexem() )
         else:

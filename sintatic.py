@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import semantic_lib
+from lexic import Token
+from semantic_lib import sem
 
 #Gramática
 G = ["P' -> P", "P -> inicio V A", "V -> varinicio LV","LV -> D LV", "LV -> varfim;",
@@ -207,7 +209,7 @@ class Sintatico:
 
     #retorna o elemento de intex i da pilha do semantico
     def getSemStck(self, index):
-        return self.__semantic_stack[i]
+        return self.__semantic_stack[index-1]
 
     #retorna o indice atual da pilha    
     def getSp(self):
@@ -321,7 +323,7 @@ class Sintatico:
                 
                 
                 #Imprime a produção
-                print (G[prod])
+                #print (G[prod])
                 
                 
                
@@ -411,7 +413,6 @@ class Sintatico:
             #obtem o lexema
             lexema = self.__token.getLexem()
 
-            print('r: '+lexema)
             #procura no conjunto dos seguintes para o dado não terminal
             for i in FOLLOWS_LEXEM[nt]:
                 if lexema == i:
